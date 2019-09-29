@@ -267,10 +267,7 @@ module.exports = function(webpackEnv) {
       },
       // Keep the runtime chunk separated to enable long term caching
       // https://twitter.com/wSokra/status/969679223278505985
-      // https://github.com/facebook/create-react-app/issues/5358
-      runtimeChunk: {
-        name: entrypoint => `runtime-${entrypoint.name}`,
-      },
+      runtimeChunk: true,
     },
     resolve: {
       // This allows you to set a fallback for where Webpack should look for modules.
@@ -327,11 +324,10 @@ module.exports = function(webpackEnv) {
           use: [
             {
               options: {
-                cache: true,
                 formatter: require.resolve('react-dev-utils/eslintFormatter'),
                 eslintPath: require.resolve('eslint'),
                 resolvePluginsRelativeTo: __dirname,
-                
+
               },
               loader: require.resolve('eslint-loader'),
             },
@@ -354,6 +350,13 @@ module.exports = function(webpackEnv) {
                 name: 'static/media/[name].[hash:8].[ext]',
               },
             },
+            {
+              test: /\.(glsl|frag|vert)$/,
+              use: [
+                require.resolve('raw-loader'),
+                require.resolve('glslify-loader'),
+              ]
+            },
             // Process application JS with Babel.
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
@@ -364,7 +367,7 @@ module.exports = function(webpackEnv) {
                 customize: require.resolve(
                   'babel-preset-react-app/webpack-overrides'
                 ),
-                
+
                 plugins: [
                   [
                     require.resolve('babel-plugin-named-asset-import'),
@@ -382,8 +385,7 @@ module.exports = function(webpackEnv) {
                 // It enables caching results in ./node_modules/.cache/babel-loader/
                 // directory for faster rebuilds.
                 cacheDirectory: true,
-                // See #6846 for context on why cacheCompression is disabled
-                cacheCompression: false,
+                cacheCompression: isEnvProduction,
                 compact: isEnvProduction,
               },
             },
@@ -404,9 +406,8 @@ module.exports = function(webpackEnv) {
                   ],
                 ],
                 cacheDirectory: true,
-                // See #6846 for context on why cacheCompression is disabled
-                cacheCompression: false,
-                
+                cacheCompression: isEnvProduction,
+
                 // If an error happens in a package, it's possible to be
                 // because it was compiled. Thus, we don't want the browser
                 // debugger to show the original code. Instead, the code
@@ -529,10 +530,9 @@ module.exports = function(webpackEnv) {
       ),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
-      // https://github.com/facebook/create-react-app/issues/5358
       isEnvProduction &&
         shouldInlineRuntimeChunk &&
-        new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
+        new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
       // Makes some environment variables available in index.html.
       // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
       // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
@@ -632,6 +632,7 @@ module.exports = function(webpackEnv) {
             '!**/src/setupProxy.*',
             '!**/src/setupTests.*',
           ],
+          watch: paths.appSrc,
           silent: true,
           // The formatter is invoked directly in WebpackDevServerUtils during development
           formatter: isEnvProduction ? typescriptFormatter : undefined,
