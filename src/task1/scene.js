@@ -26,6 +26,11 @@ function initScene() {
 
   window.addEventListener( 'resize', onWindowResize, false );
 
+  var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+  var material = new THREE.MeshNormalMaterial();
+  var cube = new THREE.Mesh( geometry, material );
+  scene.add( cube );
+
   animate()
 }
 
@@ -40,6 +45,8 @@ function onWindowResize() {
 function animate() {
 	requestAnimationFrame( animate );
   console.log("heia")
+  renderer.render( scene, camera );
+
 }
 
 export default {

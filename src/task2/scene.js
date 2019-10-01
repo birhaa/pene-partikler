@@ -6,10 +6,10 @@ import leaf2Img from './images/leaf2.png'
 import backgroundImg from './images/background.jpg'
 
 
-let camera, scene, renderer, particles;
+let camera, scene, renderer, mouse, raycaster, particles;
 let sprite1, sprite2;
 let leaves = []
-
+let selectedLeaves = []
 
 let windowHalfX = window.innerWidth / 2;
 let windowHalfY = window.innerHeight / 2;
@@ -33,7 +33,14 @@ function initScene() {
   renderer.setSize( window.innerWidth, window.innerHeight );
   document.body.appendChild( renderer.domElement );
 
+  //Ray caster
+  raycaster = new THREE.Raycaster();
+  mouse = new THREE.Vector2();
+
+
   window.addEventListener( 'resize', onWindowResize, false );
+//  window.addEventListener( 'mousemove', onMouseMove, false );
+
 
   initTextures()
   initParticles()
@@ -81,10 +88,34 @@ function onWindowResize() {
   renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
+function onMouseMove( event ) {
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+}
+
 function animate() {
 	requestAnimationFrame( animate );
 
   var time = Date.now() * 0.00005;
+
+  // update the picking ray with the camera and mouse position
+	raycaster.setFromCamera( mouse, camera );
+
+  var intersects = raycaster.intersectObjects( scene.children );
+
+	for ( var i = 0; i < intersects.length; i++ ) {
+
+		//intersects[ i ].object.material.color.set( 0xff0000 );
+    if(selectedLeaves.indexOf(intersects[ i ].object) === -1) {
+      let leaf= {
+        plane : intersects[i].object,
+        velocity : THREE.Vector3()
+      }
+      //selectedLeaves.push(leaf)
+    }
+
+
+	}
 
   for(let i = 0; i < leaves.length; i++){
     let leaf = leaves[i]
@@ -102,8 +133,40 @@ function animate() {
       leaf.plane.position.y = 500;
       leaf.plane.position.x = Math.random() * 1000 - 500;
   }
+  }
+
+  for(let j = 0; j < selectedLeaves.length; j++){
+    let leaf = selectedLeaves[j].plane
+
+    var vec = new THREE.Vector3(); // create once and reuse
+    var pos = new THREE.Vector3(); // create once and reuse
+    var delta = new THREE.Vector3(); // create once and reuse
+    let lastPos = new THREE.Vector3()
 
 
+
+    vec.set(mouse.x,mouse.y,0.5 ).unproject( camera ).sub( camera.position ).normalize();
+    var distance = - camera.position.z / vec.z;
+
+    if(j > 0){
+      lastPos.copy(selectedLeaves[j-1].plane.position)
+      lastPos.z = 0;
+      //console.log(lastPos)
+    }
+
+    pos.copy( camera.position ).add( vec.multiplyScalar( distance *21) )
+
+
+    delta.copy(leaf.position).sub(pos).normalize()
+    //console.log(leaf.position, delta);
+
+
+    //selectedLeaves[j].velocity.add(delta)
+
+
+    leaf.position.x = leaf.position.x - delta.x*0.1;
+    leaf.position.y = leaf.position.y - delta.y*0.1;
+    leaf.position.z = leaf.position.z - delta.z*0.1;
   }
 
 
