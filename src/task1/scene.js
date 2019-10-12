@@ -36,12 +36,16 @@ const initParticles = function() {
    * Task1: Init a cube
 
    https://threejs.org/docs/#api/en/geometries/BoxGeometry
+
+   Set rotation on the cube:
+
+   cube.rotateY(0.5);
+   cube.rotateX(0.5);
+
    **/
   var geometry = new THREE.BoxGeometry(1, 1, 1);
   var material = new THREE.MeshNormalMaterial();
   cube = new THREE.Mesh(geometry, material);
-  cube.rotateY(0.5);
-  cube.rotateX(0.5);
   scene.add(cube);
 
   /**
