@@ -124,24 +124,15 @@ vec3 curl(float	x,	float	y,	float	z)
     return	curl;
 }
 
-
-
 void main() {
 
     vec3 pos = texture2D( texture, vUv ).xyz;
 
-   vec3 tar = pos + curl( pos.x * frequency, pos.y * frequency, pos.z * frequency )*50.0;// * amplitude;
+    vec3 tar = pos + curl( pos.x * frequency, pos.y * frequency, pos.z * frequency )*50.0;// * amplitude;
 
     float d = length( pos-tar ) / maxDistance;
     pos = mix( pos, tar, pow( d, 5. ) );
 
-    //pos.z += sin(vUv.y*timer) * tar.y * cos(vUv.y)*5.0;
-    //pos.x += sin(vUv.x) * tar.y * cos(vUv.x*timer)*5.0;
-
     gl_FragColor = vec4( pos, 1. );
-   // gl_FragColor = vec4(1.0,0.0,0.0,1.0);
-  // gl_FragColor = vec4(timer, 0.0,0.0,1.);
-    // pos2.x -= 50.0;
-     //gl_FragColor = vec4(pos.x,pos.0,0.0,1.0);
 
 }
