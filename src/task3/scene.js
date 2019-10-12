@@ -16,6 +16,12 @@ const uniforms = {
   nofParticles: { value: nofParticles }
 };
 
+const onWindowResize = function() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+};
+
 const initScene = function(element) {
   timeStart = new Date().getTime();
 
@@ -35,6 +41,8 @@ const initScene = function(element) {
 
   element.appendChild(renderer.domElement);
   scene = new THREE.Scene();
+
+  window.addEventListener("resize", onWindowResize);
 };
 
 const initParticles = function() {
@@ -54,7 +62,7 @@ const initParticles = function() {
   geometry.addAttribute("position", new THREE.BufferAttribute(positions, 3));
 
   /**
-  * Task last -4 : Send vertex index to shader
+  * Task last 1: Send vertex index to shader
 
     To make a grid in the shader, we need to know the vertex index. The vertexIndex is
     unique per vertex, so we need use use the datastructure attribute.

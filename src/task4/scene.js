@@ -16,7 +16,12 @@ let orthoCamera, simulationScene, rtt, simulationShader;
 let animationStart = 0;
 let animationInProgress = false;
 
-let particles_num = 512;
+/**
+* Taks1 : Make enough particles to fill the spehere
+
+Try setting particle number to 512
+**/
+let particles_num = 32;
 
 const uniforms = {
   time: { value: 0.0 },
@@ -32,25 +37,13 @@ const onWindowResize = function() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 };
 
-const initRenderTarget = function() {
-  let width = particles_num;
-  let height = particles_num;
-  let options = {
-    minFilter: THREE.NearestFilter, //important as we want to sample square pixels
-    magFilter: THREE.NearestFilter, //
-    format: THREE.RGBAFormat, //180407 changed to RGBAFormat
-    type: THREE.FloatType //important as we need precise coordinates (not ints)
-  };
-  rtt = new THREE.WebGLRenderTarget(width, height, options);
-};
-
-const initAnimation = function() {
+const initScene = function(element) {
   timeStart = new Date().getTime();
 
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight, true);
   renderer.setPixelRatio(pixelRatio);
-  document.body.appendChild(renderer.domElement);
+  element.appendChild(renderer.domElement);
   window.addEventListener("resize", onWindowResize);
 
   //camera
@@ -80,13 +73,40 @@ const initAnimation = function() {
   simulationScene = new THREE.Scene();
 };
 
+const initRenderTarget = function() {
+  let width = particles_num;
+  let height = particles_num;
+  let options = {
+    minFilter: THREE.NearestFilter, //important as we want to sample square pixels
+    magFilter: THREE.NearestFilter,
+    format: THREE.RGBAFormat,
+    type: THREE.FloatType //important as we need precise coordinates (not ints)
+  };
+  rtt = new THREE.WebGLRenderTarget(width, height, options);
+};
+
 const initParticles = function() {
+  /**
+  * Task 2: Adjust blending
+
+  We want the particles to have an transparent effect where the colors adds up to the final color.
+  So pixels with many particles will be brighter.
+
+  Set material property blending to THREE.AdditiveBlending:
+  Different blending modes: https://threejs.org/docs/#api/en/constants/Materials
+  Experiment with these when doing task 4 :)
+  THREE.NoBlending
+  THREE.NormalBlending
+  THREE.AdditiveBlending
+  THREE.SubtractiveBlending
+  THREE.MultiplyBlending
+  THREE.CustomBlending
+  **/
   const material = new THREE.ShaderMaterial({
     uniforms: uniforms,
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
     transparent: true,
-    blending: THREE.AdditiveBlending,
     depthTest: false
   });
 
@@ -170,9 +190,9 @@ const animate = function() {
 };
 
 export default {
-  initScene: function() {
+  init: function(element) {
+    initScene(element);
     initRenderTarget();
-    initAnimation();
     initSimulation();
     initParticles();
     animate();

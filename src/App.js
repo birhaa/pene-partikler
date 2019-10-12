@@ -7,10 +7,10 @@ import Task4 from "./task4/scene";
 
 function App() {
   useEffect(() => {
-    //Task1.init(document.getElementById("task1"));
-    //Task2.init(document.getElementById("task2"));
-    //Task3.init(document.getElementById("task3"));
-    Task4.initScene(document.getElementById("task4"));
+    Task1.init(document.getElementById("task1"));
+    Task2.init(document.getElementById("task2"));
+    Task3.init(document.getElementById("task3"));
+    Task4.init(document.getElementById("task4"));
   }, []);
 
   return (

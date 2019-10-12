@@ -12,7 +12,7 @@ attribute float vertexIndex;
 vec3 gridPosition() {
 
   /**
-  * Task last -3 Make a particle grid
+  * Task 2: Make a particle grid
 
   1. Calculate the with of the grid which is the square root of numbe of particles
   Floor gets closest integer
@@ -36,7 +36,7 @@ void main() {
 
 
   /**
-  * Task last -1 Make waves. Use the x coordinate to set the height (y)
+  * Task 3: Make waves. Use the x coordinate to set the height (y)
 
   1. Make waves by using a sine function based on the coordinate x
   float x = newPosition.x;
@@ -59,7 +59,7 @@ void main() {
   gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
 
   /**
-  * Task last -2. Make particles bigger and adjust for depth
+  * Task last 4: Make particles bigger and adjust for depth
 
   It is natural for particles far behind looks smaller then particles closer to the camera.
   gl_Position.z is the position of the particle in the camera cooridate system, which equals the depth. (x and y is the screen coordinate)

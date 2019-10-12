@@ -5,7 +5,7 @@ void main() {
   vec3 color = vec3(1.0);
   float alpha = 1.0;
   /**
-  *Task Last
+  *Task 5: make circles
 
   1. Set alpha to the point radius:
   float radius = length(gl_PointCoord);
