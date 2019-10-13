@@ -17,7 +17,7 @@ let animationStart = 0;
 let animationInProgress = false;
 
 /**
-* Taks1 : Make enough particles to fill the spehere
+* Task 1 : Make enough particles to fill the spehere
 
 Try setting particle number to 512
 **/
@@ -55,7 +55,7 @@ const initScene = function(element) {
     renderer.getContext().drawingBufferWidth /
     renderer.getContext().drawingBufferHeight;
   camera = new THREE.PerspectiveCamera(60, ratio, 0.1, 10000);
-  camera.position.set(-75, 40, 0);
+  camera.position.set(-40, 40, 0);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
   camera.updateProjectionMatrix();
 
@@ -105,6 +105,9 @@ const initParticles = function() {
   THREE.SubtractiveBlending
   THREE.MultiplyBlending
   THREE.CustomBlending
+
+  NB! You will notice a veru white sphere, We will need to adjust the stength of each particle in the fragmentShader.
+  Try setting the strength to 0.005 (512 particles) or 0.02(256 particles)
   **/
   const material = new THREE.ShaderMaterial({
     uniforms: uniforms,

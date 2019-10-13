@@ -53,8 +53,9 @@ const initParticles = function() {
   In this task we will use PlaneGeometry instead of cubes.
   https://threejs.org/docs/#api/en/geometries/PlaneGeometry
 
+  Set number of particles to 1000
   **/
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 0; i++) {
     let texture = i % 5 == 0 ? sprite2 : sprite1;
 
     let material = new THREE.MeshBasicMaterial({
@@ -76,6 +77,10 @@ const initParticles = function() {
       geometry = bendPlaneGeometry(geometry, Math.random() * 5);
     **/
     let plane = new THREE.Mesh(geometry, material);
+
+    plane.translateX(Math.random() * 1000 - 500);
+    plane.translateY(Math.random() * 800 - 400);
+    plane.translateZ(Math.random() * 500 - 250);
     /**
     * Task 4 : Give the lead a random start rotation
 
@@ -83,9 +88,6 @@ const initParticles = function() {
       plane.rotateX(-1.0);
       plane.rotateZ(Math.random() * 2 * 3.14);
     **/
-    plane.translateX(Math.random() * 1000 - 500);
-    plane.translateY(Math.random() * 1000 - 500);
-    plane.translateZ(Math.random() * 500 - 250);
 
     //Make a leaf objeect with 3d model and particle properties
     let leaf = {
@@ -127,8 +129,8 @@ const updateParticles = function() {
     * Task 7: Reset the position when the leaf goes out of screen
 
     Use:
-      if (leaf.plane.position.y < -500) {
-        leaf.plane.position.y = 500;
+      if (leaf.plane.position.y < -400) {
+        leaf.plane.position.y = 400;
         leaf.plane.position.x = Math.random() * 1000 - 500;
       }
     **/

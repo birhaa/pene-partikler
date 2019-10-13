@@ -59,7 +59,7 @@ void main() {
   gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
 
   /**
-  * Task last 4: Make particles bigger and adjust for depth
+  * Task 4: Make particles bigger and adjust for depth
 
   It is natural for particles far behind looks smaller then particles closer to the camera.
   gl_Position.z is the position of the particle in the camera cooridate system, which equals the depth. (x and y is the screen coordinate)
@@ -68,10 +68,10 @@ void main() {
   You can try to adjust the particleSize to get a size that you like.
 
   Use:
-  float particleSize = 300.0;
+  float particleSize = 200.0;
   gl_PointSize = particleSize * pixelRatio/gl_Position.z;
   **/
-  float particleSize = 3.0;
+  float particleSize = 2.0;
   gl_PointSize = particleSize * pixelRatio;
 
 }
