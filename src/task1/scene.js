@@ -1,11 +1,12 @@
 import * as THREE from "three";
 
 let camera, scene, renderer, cube;
+let whPros;
 
 const onWindowResize = function() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth * whPros, window.innerHeight * whPros);
 };
 
 const initScene = function(element) {
@@ -25,7 +26,7 @@ const initScene = function(element) {
   //Init rendere
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth * whPros, window.innerHeight * whPros);
   element.appendChild(renderer.domElement);
 
   window.addEventListener("resize", onWindowResize, false);
@@ -74,7 +75,8 @@ function animate() {
 }
 
 export default {
-  init: function(element) {
+  init: function(element, wh) {
+    whPros = wh;
     initScene(element);
     initParticles();
     animate();

@@ -7,7 +7,7 @@ const pixelRatio = window.devicePixelRatio || 1;
 
 const nofParticles = Math.pow(125, 2);
 
-let timeStart, camera, renderer, scene;
+let timeStart, camera, renderer, scene, whPros;
 
 //
 const uniforms = {
@@ -19,7 +19,7 @@ const uniforms = {
 const onWindowResize = function() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth * whPros, window.innerHeight * whPros);
 };
 
 const initScene = function(element) {
@@ -27,7 +27,11 @@ const initScene = function(element) {
 
   renderer = new THREE.WebGLRenderer();
   renderer.setClearColor(0x1d1d1d);
-  renderer.setSize(window.innerWidth, window.innerHeight, true);
+  renderer.setSize(
+    window.innerWidth * whPros,
+    window.innerHeight * whPros,
+    true
+  );
   renderer.setPixelRatio(pixelRatio);
 
   const ratio =
@@ -97,7 +101,8 @@ const animate = function() {
 };
 
 export default {
-  init: function(element) {
+  init: function(element, wh) {
+    whPros = wh;
     initScene(element);
     initParticles();
     animate();

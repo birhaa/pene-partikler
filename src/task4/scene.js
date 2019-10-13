@@ -10,7 +10,7 @@ const pixelRatio = window.devicePixelRatio || 1;
 
 const nofParticles = 0;
 
-let timeStart, camera, renderer, scene;
+let timeStart, camera, renderer, scene, whPros;
 let orthoCamera, simulationScene, rtt, simulationShader;
 
 let animationStart = 0;
@@ -34,14 +34,18 @@ const uniforms = {
 const onWindowResize = function() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth * whPros, window.innerHeight * whPros);
 };
 
 const initScene = function(element) {
   timeStart = new Date().getTime();
 
   renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight, true);
+  renderer.setSize(
+    window.innerWidth * whPros,
+    window.innerHeight * whPros,
+    true
+  );
   renderer.setPixelRatio(pixelRatio);
   element.appendChild(renderer.domElement);
   window.addEventListener("resize", onWindowResize);
@@ -190,7 +194,8 @@ const animate = function() {
 };
 
 export default {
-  init: function(element) {
+  init: function(element, wh) {
+    whPros = wh;
     initScene(element);
     initRenderTarget();
     initSimulation();
